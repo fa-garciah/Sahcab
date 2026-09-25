@@ -1,0 +1,93 @@
+---
+import { casos } from '../data/site';
+---
+<div class="projects" data-carousel>
+  <ul class="projects__track" data-track>
+    {casos.map((p) => (
+      <li class="project">
+        <div class="project__media"><img src={p.img} alt={p.title} loading="lazy" /></div>
+        <div class="project__body">
+          <h3>{p.title}</h3>
+          <p>{p.text}</p>
+        </div>
+      </li>
+    ))}
+  </ul>
+
+  <div class="projects__nav">
+    <button type="button" class="nav-btn" data-prev aria-label="Caso anterior">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7" /></svg>
+    </button>
+    <button type="button" class="nav-btn" data-next aria-label="Siguiente caso">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .projects__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(88%, 30rem);
+    gap: clamp(1.25rem, 2.5vw, 1.9rem);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding-bottom: .4rem;
+  }
+  .projects__track::-webkit-scrollbar { display: none; }
+  @media (min-width: 760px) { .projects__track { grid-auto-columns: minmax(0, calc(50% - .95rem)); } }
+
+  .project {
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+  }
+  .project:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .project__media { aspect-ratio: 4 / 3; overflow: hidden; background: var(--sand); }
+  .project__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease); }
+  .project:hover .project__media img { transform: scale(1.04); }
+  .project__body { display: flex; flex-direction: column; gap: .6rem; padding: 1.35rem; flex: 1; }
+  .project__body h3 { font-size: var(--fs-h4); }
+  .project__body p { font-size: var(--fs-sm); color: var(--muted); }
+
+  /* Con dos casos en desktop caben ambos: las flechas solo hacen falta en pantallas estrechas */
+  .projects__nav { display: flex; gap: .5rem; margin-top: 1.5rem; }
+  @media (min-width: 760px) { .projects__nav { display: none; } }
+  .nav-btn {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color .22s var(--ease), color .22s var(--ease), border-color .22s var(--ease);
+  }
+  .nav-btn:hover { background: var(--accent-color); border-color: var(--accent-color); color: var(--bg); }
+  .nav-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
+    const track = root.querySelector<HTMLElement>('[data-track]');
+    if (!track) return;
+    const card = track.firstElementChild as HTMLElement | null;
+    const step = () => (card ? card.getBoundingClientRect().width + 24 : track.clientWidth);
+    const go = (dir: number) => {
+      const max = track.scrollWidth - track.clientWidth;
+      let next = track.scrollLeft + dir * step();
+      if (next > max + 2) next = 0;
+      if (next < -2) next = max;
+      track.scrollTo({ left: next, behavior: 'smooth' });
+    };
+    root.querySelector('[data-prev]')?.addEventListener('click', () => go(-1));
+    root.querySelector('[data-next]')?.addEventListener('click', () => go(1));
+  });
+</script>

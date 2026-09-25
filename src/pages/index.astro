@@ -1,0 +1,180 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Projects from '../components/Projects.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { intro, services, certificaciones } from '../data/site';
+
+const destacados = services.slice(0, 3);
+---
+<BaseLayout overHero>
+  {/* Portada */}
+  <section class="hero" data-theme="ink">
+    <img class="hero__bg" src="/assets/img/hero-obra.webp" alt="" aria-hidden="true" fetchpriority="high" />
+    <div class="hero__veil" aria-hidden="true"></div>
+    <div class="container hero__inner">
+      <h1 class="display reveal">Construyendo juntos<br /><span class="hero__accent">más allá de las expectativas</span></h1>
+      <div class="hero__actions reveal" style="--reveal-delay:.1s">
+        <a href="/contacto" class="btn btn--amber">Contáctanos</a>
+      </div>
+    </div>
+    <div class="greca hero__greca" aria-hidden="true"></div>
+  </section>
+
+  {/* Acerca de */}
+  <Section theme="limestone">
+    <div class="split split--wide-left">
+      <div class="reveal">
+        <h2>La elección ideal para servicios integrales y trabajos especializados de construcción.</h2>
+        <p class="lead" style="margin-top:1.1rem">
+          Somos una empresa con servicios con altos estándares de calidad, a través de las buenas
+          prácticas y mejora continua que aseguran la satisfacción del cliente. Nuestro compromiso
+          es con la excelencia, superando la expectativas y estableciéndose como un referente confiable.
+        </p>
+        <p style="margin-top:1.6rem"><a href="/nosotros" class="btn btn--primary">Ver más</a></p>
+      </div>
+      <img class="fig reveal" style="--reveal-delay:.08s" src="/assets/img/nosotros-ingeniero.webp" alt="Ingeniero en obra" loading="lazy" />
+    </div>
+  </Section>
+
+  {/* Franja */}
+  <section class="band" data-theme="amber">
+    <img class="band__bg" src="/assets/img/banner-cascos.webp" alt="" aria-hidden="true" loading="lazy" />
+    <div class="band__veil" aria-hidden="true"></div>
+    <div class="container band__inner">
+      <h2 class="reveal">Servicios Integrales y Trabajos Especializados de Construcción</h2>
+    </div>
+  </section>
+
+  {/* Nuestros servicios */}
+  <Section theme="limestone">
+    <div class="section-head section-head--center reveal">
+      <h2>Nuestros servicios</h2>
+      <p class="intro-title">{intro.titulo}</p>
+      <p>{intro.texto}</p>
+    </div>
+
+    <div class="grid grid--3" style="margin-top:2.75rem">
+      {destacados.map((s, i) => (
+        <article class="card reveal" style={`--reveal-delay:${i * 0.06}s`}>
+          <div class="card__media"><img src={s.img} alt={s.title} loading="lazy" /></div>
+          <div class="card__body"><h3>{s.title}</h3></div>
+        </article>
+      ))}
+    </div>
+
+    <div class="services-foot reveal">
+      <a href="/contacto" class="btn btn--link">Quiero ser contactado por un ejecutivo <span class="arrow">→</span></a>
+      <a href="/servicios" class="btn btn--primary">Ver más servicios</a>
+    </div>
+  </Section>
+
+  {/* Casos de éxito */}
+  <Section theme="sand">
+    <div class="section-head section-head--center reveal">
+      <h2>Casos de éxito</h2>
+    </div>
+    <div class="reveal" style="margin-top:2.25rem">
+      <Projects />
+    </div>
+  </Section>
+
+  {/* Certificaciones */}
+  <Section theme="jade" tight>
+    <h2 class="certs__title reveal">Nuestras Certificaciones</h2>
+    <ul class="certs">
+      {certificaciones.map((c) => (
+        <li><img class="cert" src={c.src} alt={c.alt} loading="lazy" /></li>
+      ))}
+    </ul>
+  </Section>
+
+  {/* Escríbenos */}
+  <Section theme="limestone" id="contacto">
+    <div class="section-head section-head--center reveal">
+      <h2>Escríbenos</h2>
+      <p>Forjemos juntos futuros proyectos exitosos.</p>
+    </div>
+    <div class="split split--top" style="margin-top:2.5rem">
+      <div class="form-panel reveal"><ContactForm /></div>
+      <img class="fig reveal" style="--reveal-delay:.08s" src="/assets/img/contacto-equipo.webp" alt="Equipo revisando planos" loading="lazy" />
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: min(84svh, 46rem);
+    padding-block: clamp(8rem, 14vw, 10rem) clamp(4rem, 8vw, 6rem);
+    background: var(--ink);
+    color: var(--white);
+    overflow: hidden;
+  }
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: hero-zoom 20s var(--ease) forwards;
+  }
+  @keyframes hero-zoom { from { transform: scale(1.05); } to { transform: scale(1); } }
+  .hero__veil {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(105deg, #16181def 0%, #16181dc4 45%, #16181d5c 100%),
+      linear-gradient(0deg, #16181d94 0%, transparent 40%);
+  }
+  .hero__inner { position: relative; max-width: 52rem; }
+  .hero__accent { color: var(--amber); }
+  .hero__actions { margin-top: 2.1rem; }
+  .hero__greca { position: absolute; left: 0; right: 0; bottom: 0; }
+
+  .fig { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius-lg); }
+
+  .band {
+    position: relative;
+    padding-block: clamp(4.5rem, 9vw, 7rem);
+    background: var(--amber);
+    color: var(--white);
+    overflow: hidden;
+    text-align: center;
+  }
+  .band__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .band__veil { position: absolute; inset: 0; background: color-mix(in srgb, var(--amber-deep) 72%, transparent); }
+  .band__inner { position: relative; max-width: 50rem; }
+
+  .intro-title { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-h4); color: var(--fg) !important; }
+
+  .services-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem 2rem;
+    margin-top: 2.5rem;
+  }
+
+  .certs__title { text-align: center; }
+  .certs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(1.5rem, 5vw, 4rem);
+    margin-top: 2rem;
+  }
+  .cert { height: clamp(64px, 8vw, 96px); width: auto; }
+
+  .form-panel {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.4rem, 2.8vw, 2.1rem);
+    box-shadow: var(--shadow-sm);
+  }
+</style>

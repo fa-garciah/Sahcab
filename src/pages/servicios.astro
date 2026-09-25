@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import PageHero from '../components/PageHero.astro';
+import { intro, services } from '../data/site';
+---
+<BaseLayout title="Servicios">
+  <PageHero title="Servicios" img="/assets/img/banner-servicios.webp" />
+
+  <Section theme="limestone" tight>
+    <div class="section-head section-head--center reveal">
+      <h2>Nuestros servicios</h2>
+      <p class="intro-title">{intro.titulo}</p>
+      <p>{intro.texto}</p>
+    </div>
+  </Section>
+
+  <Section theme="limestone">
+    <div class="services">
+      {services.map((s, i) => (
+        <article class="service reveal" id={s.slug}>
+          <div class="service__media">
+            <img src={s.img} alt={s.title} loading="lazy" />
+            <span class="service__n">{String(i + 1).padStart(2, '0')}</span>
+          </div>
+          <h3>{s.title}.</h3>
+        </article>
+      ))}
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .intro-title { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-h4); color: var(--fg) !important; }
+
+  .services { display: flex; flex-direction: column; gap: clamp(2.5rem, 5vw, 4rem); }
+  .service { display: grid; gap: clamp(1.25rem, 3.5vw, 3rem); align-items: center; }
+  @media (min-width: 880px) {
+    .service { grid-template-columns: 1fr 1fr; }
+    .service:nth-child(even) .service__media { order: 2; }
+  }
+  .service__media { position: relative; }
+  .service__media img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--radius-lg); }
+  .service__n {
+    position: absolute;
+    top: -.7rem;
+    left: -.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--limestone);
+    -webkit-text-stroke: 1.2px var(--jade);
+  }
+  .service h3 { font-size: var(--fs-h3); }
+</style>

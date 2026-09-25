@@ -1,0 +1,19 @@
+---
+interface Props {
+  theme?: 'limestone' | 'sand' | 'ink' | 'jade' | 'amber';
+  id?: string;
+  tight?: boolean;
+  flush?: boolean;
+  wide?: boolean;
+  bare?: boolean;
+  class?: string;
+}
+const { theme = 'limestone', id, tight = false, flush = false, wide = false, bare = false, class: cls } = Astro.props;
+---
+<section
+  class:list={['section', tight && 'section--tight', flush && 'section--flush', cls]}
+  data-theme={theme}
+  id={id}
+>
+  {bare ? <slot /> : <div class:list={['container', wide && 'container--wide']}><slot /></div>}
+</section>

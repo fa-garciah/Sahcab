@@ -1,0 +1,21 @@
+# Dependencias y compilación
+node_modules/
+dist/
+.astro/
+.netlify/
+
+# Archivos de trabajo locales (no forman parte del sitio)
+.claude/
+NOTES.md
+RECON/
+assets-original/
+scripts-optimize-images.mjs
+
+# Entorno y sistema
+.env
+.env.*
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

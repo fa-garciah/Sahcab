@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import PageHero from '../components/PageHero.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { site } from '../data/site';
+
+const mapSrc = `https://www.google.com/maps?q=${site.coords.lat},${site.coords.lng}&z=12&hl=es&output=embed`;
+---
+<BaseLayout title="Contacto">
+  <PageHero title="Contacto" img="/assets/img/banner-contacto.webp" />
+
+  <Section theme="limestone">
+    <div class="split split--top">
+      <div class="form-panel reveal"><ContactForm /></div>
+      <img class="fig reveal" style="--reveal-delay:.08s" src="/assets/img/contacto-equipo.webp" alt="Equipo revisando planos" loading="lazy" />
+    </div>
+  </Section>
+
+  <Section theme="sand" tight>
+    <div class="datos">
+      <div class="reveal">
+        <h3>Ubicación</h3>
+        <p>Av. Constituyentes, MZ 07, lote 04,<br />Oficina 108 A, Playa del Carmen,<br />Quintana Roo</p>
+      </div>
+      <div class="reveal" style="--reveal-delay:.06s">
+        <h3>Horario</h3>
+        <p>{site.hours[0]}<br />{site.hours[1]}</p>
+      </div>
+      <div class="reveal" style="--reveal-delay:.12s">
+        <h3>Contacto</h3>
+        <p>T. <a href={`tel:${site.phoneHref}`}>{site.phone}</a><br /><a href={`mailto:${site.email}`}>{site.email}</a></p>
+      </div>
+    </div>
+  </Section>
+
+  <Section theme="limestone" flush bare>
+    <div class="map">
+      <iframe src={mapSrc} title={`Ubicación de ${site.nameUpper} en Playa del Carmen`} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .fig { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius-lg); }
+  .form-panel {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.4rem, 3vw, 2.4rem);
+    box-shadow: var(--shadow-sm);
+  }
+  .datos { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); text-align: center; }
+  .datos h3 {
+    font-size: var(--fs-sm);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    margin-bottom: .6rem;
+  }
+  .datos p { font-size: var(--fs-sm); }
+  .datos a:hover { color: var(--jade); }
+  .map { height: clamp(17rem, 34vw, 25rem); }
+  .map iframe { width: 100%; height: 100%; border: 0; display: block; filter: grayscale(.25); }
+</style>

@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import PageHero from '../components/PageHero.astro';
+import aviso from '../data/aviso-de-privacidad.html?raw';
+---
+<BaseLayout title="Aviso de Privacidad">
+  <PageHero title="Aviso de Privacidad" img="/assets/img/banner-servicios.webp" />
+
+  <Section theme="limestone">
+    <article class="legal" set:html={aviso} />
+  </Section>
+</BaseLayout>
+
+<style>
+  .legal { max-width: 68ch; margin-inline: auto; }
+  .legal :global(p) { margin-bottom: 1rem; }
+  .legal :global(strong) { font-weight: 600; }
+  .legal :global(ol), .legal :global(ul) { margin: 0 0 1.2rem 1.2rem; list-style: disc; }
+  .legal :global(li) { margin-bottom: .4rem; }
+  .legal :global(li p) { margin-bottom: 0; }
+</style>

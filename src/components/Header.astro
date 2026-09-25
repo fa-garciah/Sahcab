@@ -1,0 +1,169 @@
+---
+import Logo from './Logo.astro';
+import { site } from '../data/site';
+
+interface Props { overHero?: boolean }
+const { overHero = false } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+<header class:list={['header', overHero && 'header--over']} data-header>
+  <a href="#main" class="skip">Saltar al contenido</a>
+  <div class="container container--wide header__inner">
+    <a href="/" class="header__logo" aria-label={`${site.nameUpper} — Inicio`}>
+      <Logo size={32} />
+    </a>
+
+    <nav class="header__nav" aria-label="Navegación principal">
+      {site.nav.map((item) => (
+        <a href={item.href} class:list={['header__link', path === item.href && 'is-active']}>{item.label}</a>
+      ))}
+    </nav>
+
+    <div class="header__actions">
+      <button class="burger" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div id="menu" class="menu" hidden>
+    <nav aria-label="Navegación móvil">
+      <a href="/" class:list={['menu__link', path === '/' && 'is-active']}>Inicio</a>
+      {site.nav.map((item) => (
+        <a href={item.href} class:list={['menu__link', path === item.href && 'is-active']}>{item.label}</a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--limestone);
+    color: var(--ink);
+    border-bottom: 1px solid #00000012;
+    transition: background-color .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
+  }
+  /* Sobre la portada: transparente, y sólido al hacer scroll */
+  .header--over {
+    position: fixed;
+    inset: 0 0 auto 0;
+    background: transparent;
+    color: var(--white);
+    border-color: transparent;
+  }
+  .header--over.is-stuck {
+    background: color-mix(in srgb, var(--ink) 93%, transparent);
+    border-color: #ffffff1a;
+    backdrop-filter: blur(8px);
+  }
+
+  .skip {
+    position: absolute;
+    left: -9999px;
+    top: .5rem;
+    background: var(--amber);
+    color: var(--ink);
+    padding: .7em 1.1em;
+    border-radius: var(--radius);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+  }
+  .skip:focus { left: 1rem; z-index: 5; }
+
+  .header__inner { display: flex; align-items: center; gap: clamp(1rem, 3vw, 2.25rem); min-height: 74px; }
+  .header__logo { margin-right: auto; }
+
+  .header__nav { display: none; gap: clamp(1.1rem, 2.2vw, 2rem); }
+  .header__link {
+    position: relative;
+    font-family: var(--font-display);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    padding-block: .35em;
+  }
+  .header__link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: var(--amber);
+    transition: width .28s var(--ease);
+  }
+  .header__link:hover::after, .header__link.is-active::after { width: 100%; }
+
+  .header__actions { display: flex; align-items: center; gap: .9rem; }
+
+  .burger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    width: 28px;
+    height: 28px;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+  .burger span { display: block; height: 2px; width: 100%; background: currentColor; border-radius: 2px; transition: transform .28s var(--ease); }
+  .burger[aria-expanded='true'] span:nth-child(1) { transform: translateY(4px) rotate(45deg); }
+  .burger[aria-expanded='true'] span:nth-child(2) { transform: translateY(-4px) rotate(-45deg); }
+
+  .menu {
+    position: fixed;
+    inset: 0;
+    background: var(--ink);
+    color: var(--white);
+    z-index: -1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2.5rem;
+    padding: 5.5rem var(--gutter) 3rem;
+    animation: menu-in .25s var(--ease);
+  }
+  .menu[hidden] { display: none; }
+  @keyframes menu-in { from { opacity: 0; } }
+  .menu nav { display: flex; flex-direction: column; }
+  .menu__link {
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 7vw, 2.3rem);
+    font-weight: 700;
+    letter-spacing: -.02em;
+    padding-block: .4em;
+    border-bottom: 1px solid #ffffff1a;
+  }
+  .menu__link.is-active { color: var(--amber); }
+
+  @media (min-width: 960px) {
+    .header__nav { display: flex; }
+    .burger { display: none; }
+    .menu { display: none !important; }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const burger = document.querySelector<HTMLButtonElement>('.burger');
+  const menu = document.querySelector<HTMLElement>('#menu');
+
+  const setOpen = (open: boolean) => {
+    burger?.setAttribute('aria-expanded', String(open));
+    burger?.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    if (menu) menu.hidden = !open;
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  burger?.addEventListener('click', () => setOpen(burger.getAttribute('aria-expanded') !== 'true'));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+
+  if (header?.classList.contains('header--over')) {
+    const onScroll = () => header.classList.toggle('is-stuck', window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+</script>

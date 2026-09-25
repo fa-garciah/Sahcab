@@ -1,0 +1,56 @@
+---
+import Logo from './Logo.astro';
+import { site } from '../data/site';
+---
+<footer class="footer" data-theme="ink">
+  <div class="greca" aria-hidden="true"></div>
+
+  <div class="container footer__grid">
+    <nav class="footer__nav" aria-label="Navegación del pie">
+      <a href="/nosotros">Nuestra empresa</a>
+      <a href="/servicios">Servicios</a>
+      <a href="/contacto">Contacto</a>
+      <a href="/aviso-de-privacidad">Política de privacidad</a>
+    </nav>
+
+    <div class="footer__brand">
+      <Logo size={40} />
+    </div>
+
+    <div class="footer__contact">
+      <p>T. <a href={`tel:${site.phoneHref}`}>{site.phone}</a></p>
+      <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+      <p>{site.address.line1}<br />{site.address.line2}</p>
+    </div>
+  </div>
+
+  <div class="container footer__bar">
+    <p>{site.nameUpper}® {site.year}</p>
+  </div>
+</footer>
+
+<style>
+  .footer { background: var(--ink); color: #f2f1ee; }
+  .footer__grid {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+    padding-block: clamp(2.5rem, 5vw, 3.75rem) 2rem;
+    text-align: center;
+  }
+  @media (min-width: 820px) { .footer__grid { grid-template-columns: 1fr auto 1fr; } }
+
+  .footer__nav { display: flex; flex-direction: column; gap: .4rem; }
+  .footer__nav a, .footer__contact a { color: var(--amber); font-size: var(--fs-sm); }
+  .footer__nav a:hover, .footer__contact a:hover { text-decoration: underline; }
+  .footer__brand { display: flex; justify-content: center; }
+  .footer__contact { display: flex; flex-direction: column; gap: .35rem; font-size: var(--fs-sm); color: #b8bec9; }
+
+  .footer__bar {
+    padding-block: 1.2rem;
+    border-top: 1px solid #ffffff14;
+    font-size: var(--fs-xs);
+    color: #7c8391;
+    text-align: center;
+  }
+</style>
