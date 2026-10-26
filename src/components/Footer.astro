@@ -9,8 +9,9 @@ import { site } from '../data/site';
     <nav class="footer__nav" aria-label="Navegación del pie">
       <a href="/nosotros">Nuestra empresa</a>
       <a href="/servicios">Servicios</a>
+      <a href="/proyectos">Casos tipo</a>
       <a href="/contacto">Contacto</a>
-      <a href="/aviso-de-privacidad">Política de privacidad</a>
+      <a href="/aviso-de-privacidad">Aviso de privacidad</a>
     </nav>
 
     <div class="footer__brand">
@@ -18,14 +19,13 @@ import { site } from '../data/site';
     </div>
 
     <div class="footer__contact">
-      <p>T. <a href={`tel:${site.phoneHref}`}>{site.phone}</a></p>
-      <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
-      <p>{site.address.line1}<br />{site.address.line2}</p>
+      <p>{site.slogan}.</p>
+      <p><a href="/contacto">{site.cta} →</a></p>
     </div>
   </div>
 
   <div class="container footer__bar">
-    <p>{site.nameUpper}® {site.year}</p>
+    <p>{site.nameUpper} {site.year}. Las fotografías del sitio son ilustrativas.</p>
   </div>
 </footer>
 

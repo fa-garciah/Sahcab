@@ -19,4 +19,14 @@ import aviso from '../data/aviso-de-privacidad.html?raw';
   .legal :global(ol), .legal :global(ul) { margin: 0 0 1.2rem 1.2rem; list-style: disc; }
   .legal :global(li) { margin-bottom: .4rem; }
   .legal :global(li p) { margin-bottom: 0; }
+  .legal :global(.pendiente) { padding: 0 .25em; background: #f5c54a66; color: inherit; border-radius: 3px; font-weight: 600; }
+  .legal :global(.aviso-borrador) {
+    padding: 1rem 1.2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--amber);
+    border-radius: var(--radius);
+    background: var(--white);
+    font-size: var(--fs-sm);
+  }
 </style>

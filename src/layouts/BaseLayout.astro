@@ -6,8 +6,6 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site';
 
-const tagline = 'Servicios Integrales y Trabajos Especializados de Construcción';
-
 interface Props {
   title?: string;
   description?: string;
@@ -15,28 +13,23 @@ interface Props {
 }
 const {
   title,
-  description = `${site.nameUpper} — ${tagline}. Servicios de Limpieza, Trabajos Especializados para Construcción, y Servicios de Inspección de Edificios.`,
+  description = `${site.nameUpper}: ${site.slogan}. Mantenimiento e instalaciones, adecuaciones y remodelación, limpieza especializada y servicios técnicos para hoteles, corporativos, comercios, industria e inmuebles.`,
   overHero = false,
 } = Astro.props;
 
 const pageTitle = title ? `${title} — ${site.nameUpper}` : site.nameUpper;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 
+/* Razón social, correo, teléfono y domicilio se agregan cuando el cliente los confirme. */
 const schema = {
   '@context': 'https://schema.org',
-  '@type': 'GeneralContractor',
+  '@type': 'HomeAndConstructionBusiness',
   name: site.nameUpper,
-  legalName: site.legalName,
+  slogan: site.slogan,
   url: site.url,
-  email: site.email,
-  telephone: site.phoneHref,
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: site.address.line1,
-    addressLocality: 'Playa del Carmen',
-    addressRegion: 'Quintana Roo',
-    addressCountry: 'MX',
-  },
+  ...(site.legalName && { legalName: site.legalName }),
+  ...(site.email && { email: site.email }),
+  ...(site.phoneHref && { telephone: site.phoneHref }),
 };
 ---
 <!doctype html>

@@ -1,9 +1,24 @@
 ---
 import { site, services } from '../data/site';
 
-/* Sin backend: al enviarse abre el cliente de correo con los datos del formulario. */
+/*
+ * Netlify Forms: Netlify detecta el formulario al publicar y guarda los envíos en el panel
+ * del sitio (Forms). Las notificaciones por correo se configuran ahí, sin publicar ninguna
+ * dirección en el sitio.
+ */
 ---
-<form class="form" data-contact-form novalidate>
+<form
+  class="form"
+  name="contacto"
+  method="POST"
+  action="/contacto?enviado=1"
+  data-netlify="true"
+  netlify-honeypot="company-website"
+  data-contact-form
+  novalidate
+>
+  <input type="hidden" name="form-name" value="contacto" />
+
   <fieldset class="field">
     <legend>Nombre</legend>
     <div class="form__row">
@@ -33,11 +48,6 @@ import { site, services } from '../data/site';
     <input type="email" name="correo" autocomplete="email" required />
   </label>
 
-  <label class="check">
-    <input type="checkbox" name="newsletter" value="Sí" />
-    <span>Regístrate para recibir noticias y actualizaciones</span>
-  </label>
-
   <label class="field">
     <span>Teléfono</span>
     <input type="text" name="telefono" inputmode="numeric" autocomplete="tel-national" />
@@ -45,16 +55,33 @@ import { site, services } from '../data/site';
 
   <label class="field">
     <span>Servicio de interés</span>
-    <select name="servicio">
+    <select name="servicio" data-servicio>
       <option value="" disabled selected>Selecciona una opción</option>
-      {services.map((s) => <option value={s.title}>{s.title}</option>)}
+      {services.map((s) => <option value={s.title} data-slug={s.slug}>{s.title}</option>)}
     </select>
   </label>
 
-  <input class="honeypot" type="text" name="company-website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+  <label class="field">
+    <span>¿Qué necesitas? (obligatorio)</span>
+    <textarea name="mensaje" rows="4" placeholder="Tipo de inmueble, ubicación y trabajo que requieres" required></textarea>
+  </label>
+
+  <label class="check">
+    <input type="checkbox" name="privacidad" value="Sí" required />
+    <span>He leído el <a href="/aviso-de-privacidad">aviso de privacidad</a> (obligatorio)</span>
+  </label>
+
+  <label class="check">
+    <input type="checkbox" name="newsletter" value="Sí" />
+    <span>Regístrate para recibir noticias y actualizaciones</span>
+  </label>
+
+  <p class="honeypot" aria-hidden="true">
+    <label>No llenar <input type="text" name="company-website" tabindex="-1" autocomplete="off" /></label>
+  </p>
 
   <div>
-    <button type="submit" class="btn btn--primary">Enviar</button>
+    <button type="submit" class="btn btn--primary">{site.cta}</button>
   </div>
   <p class="form__status" data-form-status role="status" aria-live="polite"></p>
 </form>
@@ -69,7 +96,7 @@ import { site, services } from '../data/site';
   .field { display: flex; flex-direction: column; gap: .35rem; }
   .field > span { font-size: var(--fs-sm); color: var(--muted); }
 
-  input[type='text'], input[type='email'], select {
+  input[type='text'], input[type='email'], select, textarea {
     width: 100%;
     padding: .6rem .7rem;
     font: inherit;
@@ -79,41 +106,67 @@ import { site, services } from '../data/site';
     border: 1px solid var(--line);
     border-radius: var(--radius);
   }
-  input:focus, select:focus { outline: none; border-color: var(--jade); }
+  textarea { resize: vertical; min-height: 6rem; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--jade); }
 
   .check { display: flex; align-items: flex-start; gap: .55rem; font-size: var(--fs-sm); color: var(--muted); }
   .check input { width: 16px; height: 16px; margin-top: .2rem; accent-color: var(--jade); flex: none; }
+  .check a { color: var(--jade); text-decoration: underline; }
 
-  input.honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; padding: 0; border: 0; opacity: 0; }
+  .honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
   .form__status { font-size: var(--fs-sm); color: var(--jade); }
+  .form__status.is-error { color: #b3261e; }
   .form__status:empty { display: none; }
 </style>
 
 <script>
-  import { site } from '../data/site';
+  const SENT = 'Recibimos tu solicitud. Te contactaremos para revisar el alcance.';
 
   document.querySelectorAll<HTMLFormElement>('[data-contact-form]').forEach((form) => {
     const status = form.querySelector<HTMLElement>('[data-form-status]');
-    form.addEventListener('submit', (event) => {
+    const setStatus = (text: string, error = false) => {
+      if (!status) return;
+      status.textContent = text;
+      status.classList.toggle('is-error', error);
+    };
+
+    const params = new URLSearchParams(window.location.search);
+
+    // Preselecciona el servicio cuando se llega desde /servicios (?servicio=slug).
+    const slug = params.get('servicio');
+    const select = form.querySelector<HTMLSelectElement>('[data-servicio]');
+    const option = slug && select?.querySelector<HTMLOptionElement>(`option[data-slug="${CSS.escape(slug)}"]`);
+    if (option) option.selected = true;
+
+    // Envío sin JavaScript: Netlify redirige a ?enviado=1.
+    if (params.has('enviado')) setStatus(SENT);
+
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
       if (!form.reportValidity()) return;
 
       const data = new FormData(form);
       if (data.get('company-website')) return; // honeypot
 
-      const body = [
-        `Nombre: ${data.get('fname') ?? ''} ${data.get('lname') ?? ''}`,
-        `Empresa: ${data.get('empresa') ?? ''}`,
-        `Cargo: ${data.get('cargo') ?? ''}`,
-        `Correo: ${data.get('correo') ?? ''}`,
-        `Teléfono: ${data.get('telefono') ?? ''}`,
-        `Servicio de interés: ${data.get('servicio') ?? ''}`,
-        `Noticias y actualizaciones: ${data.get('newsletter') ? 'Sí' : 'No'}`,
-      ].join('\n');
+      const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (button) button.disabled = true;
+      setStatus('Enviando…');
 
-      window.location.href = `mailto:${site.email}?subject=${encodeURIComponent('Contacto desde el sitio web')}&body=${encodeURIComponent(body)}`;
-      if (status) status.textContent = 'Abriendo tu cliente de correo…';
+      try {
+        const res = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(data as unknown as Record<string, string>).toString(),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        setStatus(SENT);
+      } catch {
+        setStatus('No pudimos enviar tu solicitud. Inténtalo de nuevo en unos minutos.', true);
+      } finally {
+        if (button) button.disabled = false;
+      }
     });
   });
 </script>

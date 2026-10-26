@@ -2,7 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
 import PageHero from '../components/PageHero.astro';
-import { intro, services } from '../data/site';
+import Photo from '../components/Photo.astro';
+import { site, intro, services } from '../data/site';
 ---
 <BaseLayout title="Servicios">
   <PageHero title="Servicios" img="/assets/img/banner-servicios.webp" />
@@ -13,6 +14,11 @@ import { intro, services } from '../data/site';
       <p class="intro-title">{intro.titulo}</p>
       <p>{intro.texto}</p>
     </div>
+    <nav class="jump reveal" aria-label="Familias de servicio">
+      {services.map((s, i) => (
+        <a href={`#${s.slug}`}><span>{String(i + 1).padStart(2, '0')}</span> {s.title}</a>
+      ))}
+    </nav>
   </Section>
 
   <Section theme="limestone">
@@ -20,10 +26,18 @@ import { intro, services } from '../data/site';
       {services.map((s, i) => (
         <article class="service reveal" id={s.slug}>
           <div class="service__media">
-            <img src={s.img} alt={s.title} loading="lazy" />
-            <span class="service__n">{String(i + 1).padStart(2, '0')}</span>
+            <Photo src={s.img} alt={s.alt} ratio="3 / 2" />
+            <span class="service__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
           </div>
-          <h3>{s.title}.</h3>
+          <div class="service__body">
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+            <h4 class="service__label">Alcance</h4>
+            <ul class="list-check">
+              {s.alcance.map((a) => <li>{a}</li>)}
+            </ul>
+            <p><a href={`/contacto?servicio=${s.slug}`} class="btn btn--link">{site.cta} <span class="arrow">→</span></a></p>
+          </div>
         </article>
       ))}
     </div>
@@ -33,14 +47,26 @@ import { intro, services } from '../data/site';
 <style>
   .intro-title { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-h4); color: var(--fg) !important; }
 
+  .jump { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; margin-top: 2rem; }
+  .jump a {
+    padding: .6em 1.1em;
+    font-family: var(--font-display);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    transition: border-color .22s var(--ease), color .22s var(--ease);
+  }
+  .jump a span { color: var(--jade); }
+  .jump a:hover { border-color: var(--jade); color: var(--jade); }
+
   .services { display: flex; flex-direction: column; gap: clamp(2.5rem, 5vw, 4rem); }
-  .service { display: grid; gap: clamp(1.25rem, 3.5vw, 3rem); align-items: center; }
+  .service { display: grid; gap: clamp(1.25rem, 3.5vw, 3rem); align-items: center; scroll-margin-top: 6rem; }
   @media (min-width: 880px) {
     .service { grid-template-columns: 1fr 1fr; }
     .service:nth-child(even) .service__media { order: 2; }
   }
   .service__media { position: relative; }
-  .service__media img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--radius-lg); }
   .service__n {
     position: absolute;
     top: -.7rem;
@@ -52,5 +78,14 @@ import { intro, services } from '../data/site';
     color: var(--limestone);
     -webkit-text-stroke: 1.2px var(--jade);
   }
-  .service h3 { font-size: var(--fs-h3); }
+  .service__body { display: flex; flex-direction: column; gap: .9rem; }
+  .service__body h3 { font-size: var(--fs-h3); }
+  .service__body > p:first-of-type { color: var(--muted); }
+  .service__label {
+    margin-top: .4rem;
+    font-size: var(--fs-sm);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--jade);
+  }
 </style>

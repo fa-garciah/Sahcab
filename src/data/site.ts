@@ -1,71 +1,128 @@
 export const site = {
   name: 'Sahcab',
   nameUpper: 'SAHCAB',
-  legalName: 'RETROSERVIMEX, S.A. DE C.V.',
   domain: 'sahcab.com',
   url: 'https://www.sahcab.com',
   lang: 'es-MX',
 
-  email: 'contacto@waacun.com',
-  phone: '984 688 9682',
-  phoneHref: '+529846889682',
-  address: {
-    line1: 'Av. Constituyentes, MZ 07, Lote 04,',
-    line2: 'Oficina 108 A, Playa del Carmen, Q. Roo',
-  },
-  hours: ['Lunes - Sábado', '09:00 am - 05:30 pm'],
-  coords: { lat: 20.6326815, lng: -87.0908232 },
+  slogan: 'Soluciones para mantener tus espacios operando correctamente',
+  cta: 'Solicita atención',
+
+  /*
+   * Pendientes de la segunda fase: el cliente entregará razón social, domicilio,
+   * teléfono y correo con dominio propio. Mientras tanto no se publica ningún dato
+   * de contacto directo; el sitio atiende sólo por formulario.
+   */
+  legalName: null as string | null,
+  email: null as string | null,
+  phone: null as string | null,
+  phoneHref: null as string | null,
+
   year: new Date().getFullYear(),
 
   nav: [
     { label: 'Nuestra empresa', href: '/nosotros' },
     { label: 'Servicios', href: '/servicios' },
-    { label: 'Proyectos', href: '/proyectos' },
+    { label: 'Casos tipo', href: '/proyectos' },
     { label: 'Contacto', href: '/contacto' },
   ],
 };
 
 export const intro = {
-  titulo: 'Servicios de Limpieza, Trabajos Especializados para Construcción, y Servicios de Inspección de Edificios.',
+  titulo: 'Mantenimiento, instalaciones, adecuaciones y limpieza especializada para inmuebles en operación.',
   texto:
-    'Colaboramos con una diversa gama de clientes que incluye consultoras especializadas en capital humano, operadoras de restaurantes de renombre, fabricantes líderes en la industria, proveedores industriales, productoras creativas, destacados hoteles y más.',
+    'Ejecutamos los trabajos en sitio, con la herramienta adecuada y equipo de protección personal. Organizamos cada servicio por especialidad para que sepas qué incluye, cómo se realiza y qué recibes al terminar.',
 };
 
-/* Los tres primeros se muestran en la portada. */
+/* Las cuatro familias de servicio. `alcance` enumera lo que cubre cada una. */
 export const services = [
-  { slug: 'alarmas', title: 'Instalación, mantenimiento y monitoreo de alarmas', img: '/assets/img/servicio-alarmas.webp' },
-  { slug: 'plomeria', title: 'Inspección de plomería o alcantarillado', img: '/assets/img/servicio-plomeria.webp' },
-  { slug: 'electricidad', title: 'Inspección de energía eléctrica', img: '/assets/img/servicio-electricidad.webp' },
-  { slug: 'muros', title: 'Reparación de muros y acabados de edificios', img: '/assets/img/servicio-muros.webp' },
-  { slug: 'luminarias', title: 'Inspección y mantenimiento de luminarias interiores y exteriores del inmueble', img: '/assets/img/servicio-luminarias.webp' },
-  { slug: 'pisos', title: 'Servicio de limpieza de pisos', img: '/assets/img/servicio-pisos.webp' },
-  { slug: 'riesgo', title: 'Análisis de riesgo o seguridad del inmueble', img: '/assets/img/servicio-riesgo.webp' },
+  {
+    slug: 'mantenimiento',
+    title: 'Mantenimiento e instalaciones',
+    text: 'Mantenimiento preventivo y correctivo de las instalaciones que sostienen la operación diaria del inmueble.',
+    alcance: [
+      'Instalaciones eléctricas, tableros y contactos',
+      'Luminarias interiores y exteriores',
+      'Plomería, drenaje y alcantarillado',
+      'Instalación y mantenimiento de sistemas de alarma',
+    ],
+    img: '/assets/img/servicio-electricidad.webp',
+    alt: 'Técnico trabajando en una instalación eléctrica',
+  },
+  {
+    slug: 'adecuaciones',
+    title: 'Adecuaciones y remodelación',
+    text: 'Obra ligera para adaptar, renovar o reparar espacios sin detener más de lo necesario la operación.',
+    alcance: [
+      'Reparación de muros, plafones y acabados',
+      'Adecuación de locales comerciales y oficinas',
+      'Remodelación de habitaciones y áreas comunes',
+      'Pintura, recubrimientos y detalles de obra',
+    ],
+    img: '/assets/img/servicio-muros.webp',
+    alt: 'Trabajos de reparación de muros y acabados',
+  },
+  {
+    slug: 'limpieza',
+    title: 'Limpieza especializada',
+    text: 'Limpieza técnica con equipo y productos adecuados a cada tipo de superficie y área.',
+    alcance: [
+      'Limpieza y tratamiento de pisos',
+      'Limpieza profunda de áreas comunes y de servicio',
+      'Limpieza posterior a obra o adecuación',
+      'Programas de limpieza periódica',
+    ],
+    img: '/assets/img/servicio-pisos.webp',
+    alt: 'Limpieza de pisos con equipo especializado',
+  },
+  {
+    slug: 'tecnicos',
+    title: 'Servicios técnicos',
+    text: 'Revisiones en sitio para detectar fallas y riesgos antes de que afecten la operación, con reporte de hallazgos.',
+    alcance: [
+      'Revisión de instalaciones eléctricas',
+      'Revisión de plomería y alcantarillado',
+      'Revisión de condiciones de seguridad del inmueble',
+      'Reporte de hallazgos y trabajos recomendados',
+    ],
+    img: '/assets/img/servicio-riesgo.webp',
+    alt: 'Técnico con casco llenando una lista de revisión en sitio',
+  },
 ];
 
+/* Cómo se atiende una solicitud, de principio a fin. */
+export const proceso = [
+  { title: 'Solicitud', text: 'Nos cuentas qué necesitas y dónde está el inmueble.' },
+  { title: 'Visita técnica', text: 'Revisamos el sitio y definimos el alcance del trabajo.' },
+  { title: 'Propuesta', text: 'Recibes el alcance, los tiempos y la cotización.' },
+  { title: 'Ejecución', text: 'Realizamos el trabajo con personal y equipo adecuados.' },
+  { title: 'Entrega', text: 'Revisamos contigo el resultado y documentamos lo realizado.' },
+];
+
+/* Ejemplos ilustrativos: no corresponden a clientes ni a resultados reales. */
 export const casos = [
   {
-    title: 'Remodelamos habitaciones de los hoteles más destacados de la Riviera Maya',
-    text: 'Que mejoraron tanto la estética como la funcionalidad, resultando en una mejora significativa en la satisfacción del cliente y un aumento en las reservaciones.',
+    title: 'Adecuación de habitaciones de hotel',
+    situacion: 'Un hotel necesita renovar acabados e instalaciones de un grupo de habitaciones sin cerrar el resto del piso.',
+    trabajo: 'Programación por bloques, reparación de muros y acabados, cambio de luminarias y limpieza posterior a obra.',
     img: '/assets/img/proyecto-hotel.webp',
+    alt: 'Espacio interior antes y después de una adecuación',
   },
   {
-    title: 'Acondicionamos locales comerciales en las principales plazas de Cancún',
-    text: 'Adaptando cada espacio a las necesidades específicas del cliente, lo que permitió una mejora notable en la atracción de clientes y el rendimiento comercial de nuestros socios.',
+    title: 'Acondicionamiento de un local comercial',
+    situacion: 'Un comercio recibe un local que debe adaptarse a su operación antes de abrir.',
+    trabajo: 'Adecuación de muros y plafones, instalaciones eléctricas y de iluminación, y limpieza final para entrega.',
     img: '/assets/img/proyecto-local.webp',
+    alt: 'Local comercial acondicionado, con iluminación y pisos terminados',
   },
 ];
 
+export const mercado = ['Hoteles', 'Corporativos', 'Comercios', 'Industria', 'Inmuebles'];
+
 export const mision =
-  'Nuestra misión es ofrecer servicios integrales de alta calidad, destacándose en el sector de servicios de limpieza, trabajos especializados para construcción, y servicios de inspección de edificios. Nos comprometemos a proporcionar soluciones eficientes y personalizadas que superen las expectativas de nuestros clientes. Además, buscamos ser un socio estratégico para empresas al ofrecer asesoría, consultoría y asistencia en áreas clave de administración, cobranza, comercialización y mercadotecnia.';
+  'Conservar instalaciones funcionales mediante servicios coordinados de mantenimiento y limpieza.';
 
 export const vision =
-  'La visión es consolidarse como líder en la industria de servicios, siendo reconocidos por nuestra excelencia en cada área en la que operamos. Buscamos expandir nuestra presencia nacional e internacional, diversificando nuestros servicios para adaptarnos a las necesidades cambiantes del mercado. Nos esforzamos por ser pioneros en innovación y sostenibilidad, manteniendo un compromiso constante con la satisfacción del cliente y la mejora continua.';
+  'Ser una opción confiable para el cuidado y la continuidad operativa de instalaciones.';
 
-export const valores = ['Excelencia', 'Desarrollo sostenible', 'Compromiso', 'Contribución positiva'];
-
-export const certificaciones = [
-  { src: '/assets/img/cert-repse.webp', alt: 'REPSE' },
-  { src: '/assets/img/cert-stps.webp', alt: 'STPS' },
-  { src: '/assets/img/cert-iso.webp', alt: 'ISO 9000' },
-  { src: '/assets/img/cert-imss.webp', alt: 'Certificación' },
-];
+export const valores = ['Orden', 'Seguridad', 'Cumplimiento', 'Servicio'];

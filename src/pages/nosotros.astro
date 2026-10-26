@@ -2,14 +2,15 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
 import PageHero from '../components/PageHero.astro';
-import { mision, vision, valores } from '../data/site';
+import Photo from '../components/Photo.astro';
+import { site, mision, vision, valores, mercado } from '../data/site';
 ---
 <BaseLayout title="Nuestra empresa">
   <PageHero title="Nuestra empresa" img="/assets/img/banner-nosotros.webp" />
 
   <Section theme="limestone">
     <div class="split">
-      <img class="fig reveal" src="/assets/img/mision.webp" alt="Nuestra misión" loading="lazy" />
+      <Photo class="reveal" src="/assets/img/mision.webp" alt="Supervisor sosteniendo planos enrollados" />
       <div class="reveal" style="--reveal-delay:.08s">
         <h2>Nuestra misión</h2>
         <p class="lead" style="margin-top:1rem">{mision}</p>
@@ -23,7 +24,7 @@ import { mision, vision, valores } from '../data/site';
         <h2>Nuestra visión</h2>
         <p class="lead" style="margin-top:1rem">{vision}</p>
       </div>
-      <img class="fig reveal" style="--reveal-delay:.08s" src="/assets/img/vision.webp" alt="Nuestra visión" loading="lazy" />
+      <Photo class="reveal" style="--reveal-delay:.08s" src="/assets/img/vision.webp" alt="Supervisora con casco y chaleco revisando un plano en obra" />
     </div>
   </Section>
 
@@ -37,10 +38,22 @@ import { mision, vision, valores } from '../data/site';
       ))}
     </ul>
   </Section>
+
+  <Section theme="limestone">
+    <div class="section-head section-head--center reveal">
+      <h2>Atendemos</h2>
+      <p>Inmuebles que necesitan seguir operando mientras se les da mantenimiento.</p>
+    </div>
+    <ul class="mercado">
+      {mercado.map((m, i) => (
+        <li class="reveal" style={`--reveal-delay:${i * 0.05}s`}>{m}</li>
+      ))}
+    </ul>
+    <p class="cta reveal"><a href="/contacto" class="btn btn--primary">{site.cta}</a></p>
+  </Section>
 </BaseLayout>
 
 <style>
-  .fig { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius-lg); }
   .valores {
     display: grid;
     gap: 1rem;
@@ -58,4 +71,14 @@ import { mision, vision, valores } from '../data/site';
     border-radius: var(--radius-lg);
     background: #ffffff33;
   }
+  .mercado { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; margin-top: 2rem; }
+  .mercado li {
+    padding: .7em 1.4em;
+    font-family: var(--font-display);
+    font-weight: 600;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--white);
+  }
+  .cta { margin-top: 2.25rem; text-align: center; }
 </style>

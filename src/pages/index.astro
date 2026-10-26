@@ -3,9 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
 import Projects from '../components/Projects.astro';
 import ContactForm from '../components/ContactForm.astro';
-import { intro, services, certificaciones } from '../data/site';
-
-const destacados = services.slice(0, 3);
+import Photo from '../components/Photo.astro';
+import { site, intro, services, proceso, mercado } from '../data/site';
 ---
 <BaseLayout overHero>
   {/* Portada */}
@@ -13,9 +12,11 @@ const destacados = services.slice(0, 3);
     <img class="hero__bg" src="/assets/img/hero-obra.webp" alt="" aria-hidden="true" fetchpriority="high" />
     <div class="hero__veil" aria-hidden="true"></div>
     <div class="container hero__inner">
-      <h1 class="display reveal">Construyendo juntos<br /><span class="hero__accent">más allá de las expectativas</span></h1>
+      <p class="eyebrow hero__eyebrow reveal">Mantenimiento integral de inmuebles</p>
+      <h1 class="display reveal">Soluciones para mantener tus espacios <span class="hero__accent">operando correctamente</span></h1>
       <div class="hero__actions reveal" style="--reveal-delay:.1s">
-        <a href="/contacto" class="btn btn--amber">Contáctanos</a>
+        <a href="/contacto" class="btn btn--amber">{site.cta}</a>
+        <a href="/servicios" class="btn btn--outline">Ver servicios</a>
       </div>
     </div>
     <div class="greca hero__greca" aria-hidden="true"></div>
@@ -25,15 +26,15 @@ const destacados = services.slice(0, 3);
   <Section theme="limestone">
     <div class="split split--wide-left">
       <div class="reveal">
-        <h2>La elección ideal para servicios integrales y trabajos especializados de construcción.</h2>
+        <h2>Ejecutamos el mantenimiento, las instalaciones y las adecuaciones que tu inmueble necesita.</h2>
         <p class="lead" style="margin-top:1.1rem">
-          Somos una empresa con servicios con altos estándares de calidad, a través de las buenas
-          prácticas y mejora continua que aseguran la satisfacción del cliente. Nuestro compromiso
-          es con la excelencia, superando la expectativas y estableciéndose como un referente confiable.
+          Somos una empresa de servicios de mantenimiento integral con altos estándares de calidad,
+          sustentados en buenas prácticas y mejora continua. Nuestro compromiso es con la excelencia:
+          trabajamos superando las expectativas y estableciéndonos como un referente confiable.
         </p>
-        <p style="margin-top:1.6rem"><a href="/nosotros" class="btn btn--primary">Ver más</a></p>
+        <p style="margin-top:1.6rem"><a href="/nosotros" class="btn btn--primary">Conócenos</a></p>
       </div>
-      <img class="fig reveal" style="--reveal-delay:.08s" src="/assets/img/nosotros-ingeniero.webp" alt="Ingeniero en obra" loading="lazy" />
+      <Photo class="reveal" style="--reveal-delay:.08s" src="/assets/img/nosotros-ingeniero.webp" alt="Supervisor con casco de seguridad" />
     </div>
   </Section>
 
@@ -42,7 +43,7 @@ const destacados = services.slice(0, 3);
     <img class="band__bg" src="/assets/img/banner-cascos.webp" alt="" aria-hidden="true" loading="lazy" />
     <div class="band__veil" aria-hidden="true"></div>
     <div class="container band__inner">
-      <h2 class="reveal">Servicios Integrales y Trabajos Especializados de Construcción</h2>
+      <h2 class="reveal">Mantenimiento, adecuaciones, limpieza especializada y servicios técnicos</h2>
     </div>
   </section>
 
@@ -54,50 +55,73 @@ const destacados = services.slice(0, 3);
       <p>{intro.texto}</p>
     </div>
 
-    <div class="grid grid--3" style="margin-top:2.75rem">
-      {destacados.map((s, i) => (
-        <article class="card reveal" style={`--reveal-delay:${i * 0.06}s`}>
-          <div class="card__media"><img src={s.img} alt={s.title} loading="lazy" /></div>
-          <div class="card__body"><h3>{s.title}</h3></div>
-        </article>
+    <div class="grid grid--4" style="margin-top:2.75rem">
+      {services.map((s, i) => (
+        <a href={`/servicios#${s.slug}`} class="card reveal" style={`--reveal-delay:${i * 0.06}s`}>
+          <div class="card__media"><img src={s.img} alt={s.alt} loading="lazy" /></div>
+          <div class="card__body">
+            <span class="card__n">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="card__title">{s.title}</h3>
+            <p>{s.text}</p>
+          </div>
+        </a>
       ))}
     </div>
+    <p class="note reveal">Imágenes ilustrativas.</p>
 
     <div class="services-foot reveal">
-      <a href="/contacto" class="btn btn--link">Quiero ser contactado por un ejecutivo <span class="arrow">→</span></a>
-      <a href="/servicios" class="btn btn--primary">Ver más servicios</a>
+      <a href="/contacto" class="btn btn--link">{site.cta} <span class="arrow">→</span></a>
+      <a href="/servicios" class="btn btn--primary">Ver alcance de cada servicio</a>
     </div>
   </Section>
 
-  {/* Casos de éxito */}
+  {/* Cómo trabajamos */}
+  <Section theme="ink">
+    <div class="section-head section-head--center reveal">
+      <h2>Cómo atendemos tu solicitud</h2>
+      <p>Del primer contacto a la entrega, cada trabajo sigue el mismo orden.</p>
+    </div>
+    <ol class="steps">
+      {proceso.map((p, i) => (
+        <li class="reveal" style={`--reveal-delay:${i * 0.06}s`}>
+          <span class="steps__n">{String(i + 1).padStart(2, '0')}</span>
+          <h3>{p.title}</h3>
+          <p>{p.text}</p>
+        </li>
+      ))}
+    </ol>
+  </Section>
+
+  {/* Casos tipo */}
   <Section theme="sand">
     <div class="section-head section-head--center reveal">
-      <h2>Casos de éxito</h2>
+      <h2>Casos tipo</h2>
+      <p>Ejemplos ilustrativos del tipo de trabajo que realizamos. No corresponden a clientes específicos.</p>
     </div>
     <div class="reveal" style="margin-top:2.25rem">
       <Projects />
     </div>
   </Section>
 
-  {/* Certificaciones */}
+  {/* Mercado */}
   <Section theme="jade" tight>
-    <h2 class="certs__title reveal">Nuestras Certificaciones</h2>
-    <ul class="certs">
-      {certificaciones.map((c) => (
-        <li><img class="cert" src={c.src} alt={c.alt} loading="lazy" /></li>
+    <h2 class="mercado__title reveal">Atendemos</h2>
+    <ul class="mercado">
+      {mercado.map((m, i) => (
+        <li class="reveal" style={`--reveal-delay:${i * 0.05}s`}>{m}</li>
       ))}
     </ul>
   </Section>
 
-  {/* Escríbenos */}
+  {/* Solicita atención */}
   <Section theme="limestone" id="contacto">
     <div class="section-head section-head--center reveal">
-      <h2>Escríbenos</h2>
-      <p>Forjemos juntos futuros proyectos exitosos.</p>
+      <h2>{site.cta}</h2>
+      <p>Cuéntanos qué necesita tu inmueble y te contactamos para revisar el alcance.</p>
     </div>
     <div class="split split--top" style="margin-top:2.5rem">
       <div class="form-panel reveal"><ContactForm /></div>
-      <img class="fig reveal" style="--reveal-delay:.08s" src="/assets/img/contacto-equipo.webp" alt="Equipo revisando planos" loading="lazy" />
+      <Photo class="reveal" style="--reveal-delay:.08s" src="/assets/img/contacto-equipo.webp" alt="Equipo revisando planos de un inmueble" />
     </div>
   </Section>
 </BaseLayout>
@@ -131,10 +155,10 @@ const destacados = services.slice(0, 3);
   }
   .hero__inner { position: relative; max-width: 52rem; }
   .hero__accent { color: var(--amber); }
-  .hero__actions { margin-top: 2.1rem; }
+  .hero__eyebrow { color: var(--amber); margin-bottom: 1.1rem; }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2.1rem; }
+  .hero .btn--outline { color: var(--white); }
   .hero__greca { position: absolute; left: 0; right: 0; bottom: 0; }
-
-  .fig { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius-lg); }
 
   .band {
     position: relative;
@@ -159,16 +183,48 @@ const destacados = services.slice(0, 3);
     margin-top: 2.5rem;
   }
 
-  .certs__title { text-align: center; }
-  .certs {
+  .card__n { font-family: var(--font-display); font-size: var(--fs-sm); font-weight: 700; color: var(--accent-color); }
+  .card__title { font-size: var(--fs-h4); }
+  .note { margin-top: .9rem; font-size: var(--fs-xs); color: var(--muted); text-align: center; }
+
+  .steps {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    margin-top: 2.5rem;
+  }
+  @media (min-width: 760px) { .steps { grid-template-columns: repeat(5, 1fr); } }
+  .steps li {
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
+    padding: 1.4rem 1.2rem;
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--amber);
+    border-radius: var(--radius-lg);
+    background: #ffffff08;
+  }
+  .steps__n { font-family: var(--font-display); font-weight: 700; color: var(--amber); }
+  .steps h3 { font-size: var(--fs-h4); }
+  .steps p { font-size: var(--fs-sm); color: var(--muted); }
+
+  .mercado__title { text-align: center; }
+  .mercado {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    gap: clamp(1.5rem, 5vw, 4rem);
-    margin-top: 2rem;
+    gap: .75rem;
+    margin-top: 1.75rem;
   }
-  .cert { height: clamp(64px, 8vw, 96px); width: auto; }
+  .mercado li {
+    padding: .7em 1.4em;
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: .04em;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: #ffffff14;
+  }
 
   .form-panel {
     background: var(--white);

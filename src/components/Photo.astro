@@ -1,0 +1,33 @@
+---
+/* Foto de banco rotulada como ilustrativa, hasta que lleguen las fotos propias. */
+interface Props {
+  src: string;
+  alt: string;
+  ratio?: string;
+  class?: string;
+  style?: string;
+  label?: string;
+}
+const { src, alt, ratio = '4 / 5', class: cls, style, label = 'Imagen ilustrativa' } = Astro.props;
+---
+<figure class:list={['photo', cls]} style={`--ratio:${ratio};${style ?? ''}`}>
+  <img src={src} alt={alt} loading="lazy" />
+  <figcaption>{label}</figcaption>
+</figure>
+
+<style>
+  .photo { position: relative; overflow: hidden; border-radius: var(--radius-lg); background: var(--sand); }
+  .photo img { width: 100%; aspect-ratio: var(--ratio); object-fit: cover; display: block; }
+  figcaption {
+    position: absolute;
+    left: .75rem;
+    bottom: .75rem;
+    padding: .25em .7em;
+    font-size: var(--fs-xs);
+    letter-spacing: .04em;
+    color: var(--white);
+    background: #16181dbf;
+    border-radius: 999px;
+    pointer-events: none;
+  }
+</style>
